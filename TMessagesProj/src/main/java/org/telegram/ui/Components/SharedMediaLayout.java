@@ -56,8 +56,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
@@ -160,6 +158,28 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     ActionBarPopupWindow optionsWindow;
     FlickerLoadingView globalGradientView;
     private final int viewType;
+
+    private HintView noForwardHintTextView;
+
+    private void showNoForwardHint(boolean hide) {
+        if (!isNoForwardsChat(dialog_id))
+            return;
+
+        if (noForwardHintTextView == null) {
+            noForwardHintTextView = new HintView(getContext(), 8);
+            noForwardHintTextView.setShowingDuration(4000);
+            ViewGroup parentView = (ViewGroup)SharedMediaLayout.this.getRootView();
+            parentView.addView(noForwardHintTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
+        }
+        if (hide) {
+            noForwardHintTextView.hide();
+            return;
+        }
+
+        TLRPC.Chat chat = MessagesController.getInstance(profileActivity.getCurrentAccount()).getChat(-dialog_id);
+        noForwardHintTextView.setText(ChatObject.isChannel(chat)?LocaleController.getString("PopupNoForwardsChannel", R.string.PopupNoForwardsChannel): LocaleController.getString("PopupNoForwardsGroup", R.string.PopupNoForwardsGroup));
+        noForwardHintTextView.showForView(forwardItem, true);
+    }
 
     public boolean checkPinchToZoom(MotionEvent ev) {
         if (mediaPages[0].selectedType != 0 || getParent() == null) {
@@ -325,6 +345,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         public SharedMediaFastScrollTooltip fastScrollHintView;
         public Runnable fastScrollHideHintRunnable;
         public boolean fastScrollHinWasShown;
+
+        public boolean noForwardHinWasShown;
 
         public int highlightMessageId;
         public boolean highlightAnimation;
@@ -1433,6 +1455,11 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             actionModeViews.add(forwardItem);
             forwardItem.setOnClickListener(v -> onActionBarItemClick(forward));
         }
+
+        if (isNoForwardsChat(dialog_id)){
+            forwardItem.setEnabled(false);
+        }
+
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         deleteItem.setIcon(R.drawable.msg_delete);
         deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
@@ -3454,6 +3481,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         }
         if (show) {
             actionModeLayout.setVisibility(VISIBLE);
+            showNoForwardHint(false);
+        } else {
+            showNoForwardHint(true);
         }
         actionModeAnimation = new AnimatorSet();
         actionModeAnimation.playTogether(ObjectAnimator.ofFloat(actionModeLayout, View.ALPHA, show ? 1.0f : 0.0f));
@@ -6429,5 +6459,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         boolean canSearchMembers();
 
         void updateSelectedMediaTabText();
+    }
+
+    public boolean isNoForwardsChat(Long dialogId) {
+       if (dialogId!=null) {
+            TLRPC.Chat chat = MessagesController.getInstance(profileActivity.getCurrentAccount()).getChat(-dialogId);
+            if (chat!=null)
+                return chat.noforwards;
+        }
+        return false;
     }
 }

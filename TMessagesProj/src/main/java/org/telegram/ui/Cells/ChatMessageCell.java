@@ -696,6 +696,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public boolean needReplyImage;
     private boolean replyPressed;
     private TLRPC.PhotoSize currentReplyPhoto;
+    public boolean noDrawShareButton = false;
 
     private int drawSideButton;
     private boolean sideButtonPressed;
@@ -9599,7 +9600,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (currentMessageObject.deleted || currentMessageObject.isSponsored()) {
+        if (currentMessageObject.deleted || currentMessageObject.isSponsored() || noDrawShareButton) {
             return false;
         }
         if (currentPosition != null) {

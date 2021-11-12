@@ -1515,7 +1515,14 @@ public class MessageObject {
                     messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", R.string.EventLogPinnedMessages), "un1", fromUser);
                 }
             }
-        } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionStopPoll) {
+        }else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleNoForwards) {
+            if (((TLRPC.TL_channelAdminLogEventActionToggleNoForwards) event.action).new_value) {
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggleNoForwardOn", R.string.EventLogToggleNoForwardOn), "un1", fromUser);
+            } else {
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggleNoForwardOff", R.string.EventLogToggleNoForwardOff), "un1", fromUser);
+            }
+        }
+        else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionStopPoll) {
             TLRPC.TL_channelAdminLogEventActionStopPoll action = (TLRPC.TL_channelAdminLogEventActionStopPoll) event.action;
             message = action.message;
             if (message.media instanceof TLRPC.TL_messageMediaPoll && ((TLRPC.TL_messageMediaPoll) message.media).poll.quiz) {

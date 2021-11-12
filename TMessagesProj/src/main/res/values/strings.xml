@@ -380,6 +380,10 @@
     <string name="GroupSettingsChangedAlert">You have changed some settings in this group. Apply changes?</string>
     <string name="ChannelSettingsChangedAlert">You have changed some settings in this channel. Apply changes?</string>
     <string name="ChannelPublic">Public Channel</string>
+    <string name="ChannelSavingContent">Saving content</string>
+    <string name="ChannelRestrictSavingContent">Restrict saving content</string>
+    <string name="GroupRestrictSavingContentHelp">Participants won\'t be able to forward messages from this group or save media files.</string>
+    <string name="ChannelRestrictSavingContentHelp">Participants won\'t be able to forward messages from this channel or save media files.</string>
     <string name="MegaPublic">Public Group</string>
     <string name="MegaLocation">Location-based Group</string>
     <string name="ChannelPublicInfo">Public channels can be found in search, anyone can join them.</string>
@@ -589,8 +593,10 @@
     <string name="GroupSettingsTitle">Group Settings</string>
     <string name="ChannelSettingsTitle">Channel Settings</string>
     <string name="TypePrivate">Private</string>
+    <string name="TypePrivateRestricted">Private restricted</string>
     <string name="TypePublic">Public</string>
     <string name="TypePrivateGroup">Private</string>
+    <string name="TypePrivateRestrictedGroup">Private restricted</string>
     <string name="TypePublicGroup">Public</string>
     <string name="TypeLocationGroup">Link</string>
     <string name="TypeLocationGroupEdit">Tap to add a permanent link</string>
@@ -751,6 +757,8 @@
     <string name="EventLogUnpinnedMessages">un1 unpinned message</string>
     <string name="EventLogStopPoll">un1 stopped the poll:</string>
     <string name="EventLogStopQuiz">un1 stopped the quiz:</string>
+    <string name="EventLogToggleNoForwardOn">un1 enabled no forward</string>
+    <string name="EventLogToggleNoForwardOff">un1 disabled no forward</string>
     <string name="EventLogDeletedMessages">un1 deleted this message:</string>
     <string name="EventLogChangedLocation">un1 changed group location to \"%1$s\"</string>
     <string name="EventLogRemovedLocation">un1 removed group location</string>
@@ -4809,4 +4817,6 @@
     <string name="UserAcceptedToGroupAction">un1 was accepted into the group</string>
     <string name="UserAcceptedToGroupPush">%1$s was accepted into the group</string>
     <string name="UserAcceptedToGroupPushWithGroup">%2$s|%1$s was accepted into the group</string>
+    <string name="PopupNoForwardsChannel">Forwards from this channel are restricted.</string>
+    <string name="PopupNoForwardsGroup">Forwards from this group are restricted.</string>
 </resources>
