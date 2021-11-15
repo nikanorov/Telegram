@@ -4819,4 +4819,5 @@
     <string name="UserAcceptedToGroupPushWithGroup">%2$s|%1$s was accepted into the group</string>
     <string name="PopupNoForwardsChannel">Forwards from this channel are restricted.</string>
     <string name="PopupNoForwardsGroup">Forwards from this group are restricted.</string>
+    <string name="PopupSendMessageAs">Send message as…</string>
 </resources>

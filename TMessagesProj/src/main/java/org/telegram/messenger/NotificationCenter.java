@@ -33,6 +33,7 @@ public class NotificationCenter {
     public static final int changeRepliesCounter = totalEvents++;
     public static final int messagesDidLoad = totalEvents++;
     public static final int didLoadSponsoredMessages = totalEvents++;
+    public static final int didLoadSendAs = totalEvents++;
     public static final int messagesDidLoadWithoutProcess = totalEvents++;
     public static final int loadingMessagesFailed = totalEvents++;
     public static final int messageReceivedByAck = totalEvents++;

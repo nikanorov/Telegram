@@ -1280,7 +1280,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 for (int a = 0; a < selectedDialogs.size(); a++) {
                     long key = selectedDialogs.keyAt(a);
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null, null);
                     }
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, false,false, true, 0);
                 }
@@ -1296,9 +1296,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     for (int a = 0; a < selectedDialogs.size(); a++) {
                         long key = selectedDialogs.keyAt(a);
                         if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null);
+                            SendMessagesHelper.getInstance(currentAccount).sendMessage(commentTextView.getText().toString(), key, null, null, null, true, null, null, null, true, 0, null, null);
                         }
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null, null);
                     }
                 }
                 onSend(selectedDialogs, 1);

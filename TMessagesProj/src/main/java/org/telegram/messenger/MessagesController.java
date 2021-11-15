@@ -174,6 +174,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private SparseIntArray migratedChats = new SparseIntArray();
 
     private LongSparseArray<SponsoredMessagesInfo> sponsoredMessages = new LongSparseArray<>();
+    private LongSparseArray<SendAsPeersInfo> sendAsPeers = new LongSparseArray<>();
 
     private HashMap<String, ArrayList<MessageObject>> reloadingWebpages = new HashMap<>();
     private LongSparseArray<ArrayList<MessageObject>> reloadingWebpagesPending = new LongSparseArray<>();
@@ -330,6 +331,11 @@ public class MessagesController extends BaseController implements NotificationCe
         private ArrayList<MessageObject> messages;
         private long loadTime;
         private boolean loading;
+    }
+
+    private class SendAsPeersInfo {
+        private ArrayList<TLRPC.Peer> peers;
+        private long loadTime;
     }
 
     public static class FaqSearchResult {
@@ -13860,6 +13866,46 @@ public class MessagesController extends BaseController implements NotificationCe
                     getNotificationCenter().postNotificationName(NotificationCenter.didLoadSponsoredMessages, dialogId, result);
                 }
             });
+        });
+        return null;
+    }
+
+    public void setSendAs (long groupId, long sendAs) {
+        TLRPC.TL_messages_saveDefaultSendAs req = new TLRPC.TL_messages_saveDefaultSendAs();
+        req.peer = getInputPeer(-groupId);
+        req.send_as = getInputPeer(-sendAs);
+        getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+
+            }
+        });
+    }
+
+    public ArrayList<TLRPC.Peer> getSendAs (long groupId) {
+        SendAsPeersInfo info = sendAsPeers.get(groupId);
+        if (info != null && SystemClock.elapsedRealtime() - info.loadTime < 10 * 1000)
+            return info.peers;
+
+        TLRPC.TL_channels_getSendAs req = new TLRPC.TL_channels_getSendAs();
+        req.peer = getInputPeer(-groupId);
+        getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                TLRPC.TL_channels_sendAsPeers res = (TLRPC.TL_channels_sendAsPeers) response;
+                SendAsPeersInfo finalInfo = new SendAsPeersInfo();
+                if (res.peers.size()>0) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        putUsers(res.users, false);
+                        putChats(res.chats, false);
+                    });
+
+                    finalInfo.peers = res.peers;
+                    finalInfo.loadTime = SystemClock.elapsedRealtime();
+                    sendAsPeers.put(groupId, finalInfo);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        getNotificationCenter().postNotificationName(NotificationCenter.didLoadSendAs, groupId, finalInfo);
+                    });
+                }
+            }
         });
         return null;
     }
